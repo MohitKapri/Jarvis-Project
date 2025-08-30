@@ -4,8 +4,6 @@ import pyttsx3
 import musicLibrary
 import requests
 
-#pip install pocketsphinx
-
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
 newsapi = ""
@@ -83,6 +81,7 @@ if __name__ == "__main__":
             print("Network error.")
         except Exception as e:
             print(f"Error: {e}")
+
 
 
 
