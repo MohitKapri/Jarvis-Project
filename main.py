@@ -3,10 +3,11 @@ import webbrowser
 import pyttsx3
 import musicLibrary
 import requests
+import datetime
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-newsapi = ""
+newsapi = "0e97f86742334009a7b626b698133da6"
 
 
 def speak(text):
@@ -48,16 +49,25 @@ def processCommand(c):
     elif "exit" in c or "quit" in c or "stop" in c:
         speak("Shutting down. Goodbye!")
         exit()
+    elif "time" in c.lower(): #Check time
+        now = datetime.datetime.now().strftime("%I:%M %p")
+        speak(f"The time is {now}")
+
+    elif "date" in c.lower(): #Check date
+        today = datetime.date.today().strftime("%B %d, %Y")
+        speak(f"Today's date is {today}")
 
     else:
         speak("Sorry, I did not understand that command.")
+    
+    
     
 
 if __name__ == "__main__":
     speak("Initializing Jarvis......")
     while True:
         #Listen for the wake word "Jarvis"
-        #obtain auddio from microphone
+        #obtain audio from microphone
         r = sr.Recognizer()
        
 
@@ -81,7 +91,6 @@ if __name__ == "__main__":
             print("Network error.")
         except Exception as e:
             print(f"Error: {e}")
-
 
 
 
