@@ -4,10 +4,12 @@ import pyttsx3
 import musicLibrary
 import requests
 import datetime
+import pyjokes
+import os
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-newsapi = "" #Add your newsapi here
+newsapi = "0e97f86742334009a7b626b698133da6"
 
 
 def speak(text):
@@ -15,6 +17,8 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
 
+
+#Open Websites
 def processCommand(c):
     if "open google" in c.lower():
         webbrowser.open("http://google.com")
@@ -25,6 +29,8 @@ def processCommand(c):
     elif  "open youtube" in c.lower():
         webbrowser.open("http://youtube.com")
 
+
+    #Listen music 
     elif c.lower() .startswith("play"):
         song = c.lower().split(" ",1)[1]
         link =musicLibrary.music.get[song]
@@ -33,7 +39,7 @@ def processCommand(c):
         else:
             speak("Sorry , I don't have that song in my library.")
         
-    
+    #Listen Latest News 
     elif "news" in  c.lower():
         r=requests.get(f"https://newsapi.org/v2/top-headlines?country=in&apiKey={newsapi}")
         if r.status_code == 200:
@@ -46,22 +52,39 @@ def processCommand(c):
                 speak(f"{i}. {article['title']}")
         else:
             speak("Sorry, I couldn't fetch the news right now.")
-    elif "exit" in c or "quit" in c or "stop" in c:
-        speak("Shutting down. Goodbye!")
-        exit()
-    elif "time" in c.lower(): #Check time
+    
+
+    #Check date & time
+    elif "date" in c.lower(): 
+        today = datetime.date.today().strftime("%B %d, %Y")
+        speak(f"Today's date is {today}")
+    elif "time" in c.lower():
         now = datetime.datetime.now().strftime("%I:%M %p")
         speak(f"The time is {now}")
 
-    elif "date" in c.lower(): #Check date
-        today = datetime.date.today().strftime("%B %d, %Y")
-        speak(f"Today's date is {today}")
 
+    #Listen random jokes
+    elif "joke" in c.lower():
+        joke = pyjokes.get_joke()
+        speak(joke)
+
+    
+    #Open  System Apps 
+    elif "open notepad" in c.lower():
+        os.system("notepad")
+    elif "open camera" in c.lower():
+        os.system("camera")
+    elif "open calculator" in c.lower():
+        os.system("calc")
+
+    #Exit
+    elif "exit" in c.lower() or "quit" in c.lower() or "stop" in c.lower():
+        speak("Shutting down. Goodbye!")
+        exit()
+    
     else:
         speak("Sorry, I did not understand that command.")
-    
-    
-    
+     
 
 if __name__ == "__main__":
     speak("Initializing Jarvis......")
@@ -70,7 +93,6 @@ if __name__ == "__main__":
         #obtain audio from microphone
         r = sr.Recognizer()
        
-
         print("recognizing")
         try:
             with sr.Microphone() as source:
@@ -91,7 +113,6 @@ if __name__ == "__main__":
             print("Network error.")
         except Exception as e:
             print(f"Error: {e}")
-
 
 
 
