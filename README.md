@@ -51,5 +51,5 @@ It listens for the wake word **"Jarvis"** and then executes commands such as ope
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/jarvis-voice-assistant.git
+   git clone https://github.com/MohitKapri/jarvis-voice-assistant.git
    cd jarvis-voice-assistant
