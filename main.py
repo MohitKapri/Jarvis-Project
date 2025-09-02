@@ -7,7 +7,7 @@ import datetime
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-newsapi = "0e97f86742334009a7b626b698133da6"
+newsapi = "" #Add your newsapi here
 
 
 def speak(text):
@@ -91,6 +91,7 @@ if __name__ == "__main__":
             print("Network error.")
         except Exception as e:
             print(f"Error: {e}")
+
 
 
 
