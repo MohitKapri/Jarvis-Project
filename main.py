@@ -1,15 +1,17 @@
-import speech_recognition as sr
-import webbrowser
-import pyttsx3
-import musicLibrary
-import requests
-import datetime
-import pyjokes
-import os
+import speech_recognition as sr    #It converts speech(voice) into text.
+import webbrowser    #Open websites using default browsers.
+import pyttsx3    #Text-to-speech conversion.
+import musicLibrary    #Stores a dictionary of song and their links.
+import requests    #Sending HTTP requests to APIs.
+import datetime    #Work with current date and time.
+import pyjokes    #Generate random jokes.
+import os    #Interact with the operating system.
+import sys    #Handle system-level tasks
+import wikipedia    #Search and fetch summaries from Wikipedia.
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-newsapi = "0e97f86742334009a7b626b698133da6"
+newsapi = "" # write your API key here
 
 
 def speak(text):
@@ -33,7 +35,7 @@ def processCommand(c):
     #Listen music 
     elif c.lower() .startswith("play"):
         song = c.lower().split(" ",1)[1]
-        link =musicLibrary.music.get[song]
+        link =musicLibrary.music.get(song)
         if link:
             webbrowser.open(link)
         else:
@@ -72,15 +74,22 @@ def processCommand(c):
     #Open  System Apps 
     elif "open notepad" in c.lower():
         os.system("notepad")
-    elif "open camera" in c.lower():
-        os.system("camera")
     elif "open calculator" in c.lower():
         os.system("calc")
+
+    #Wikipedia Search
+    elif "who is " in c.lower() or "what is" in c.lower() or "tell me about" in c.lower:
+        try:
+            query = c.lower().replace("who is","").replace("what is","").replace("tell me about","")
+            result = wikipedia.summary(query, sentences=2)
+            speak(result)
+        except:
+            speak("Sorry, I couldn't find any information on that. ")
 
     #Exit
     elif "exit" in c.lower() or "quit" in c.lower() or "stop" in c.lower():
         speak("Shutting down. Goodbye!")
-        exit()
+        sys.exit()
     
     else:
         speak("Sorry, I did not understand that command.")
@@ -98,17 +107,24 @@ if __name__ == "__main__":
             with sr.Microphone() as source:
                 print("Listening....")
                 audio = r.listen(source , timeout=5 , phrase_time_limit=5)
-                word = r.recognize_google(audio)
+                try:
+                    word = r.recognize_google(audio) 
+                except sr.UnknownValueError:
+                    print("Sorry, I could not understand your voice.")
+                    continue
+                
                 if(word.lower() == "jarvis"):
                     speak("Yes, how can I help you?")
                     #Listen for command
                     with sr.Microphone() as source:
                         print("jarvis Active....")
                         audio = r.listen(source, timeout=5, phrase_time_limit=7)
-                        command = r.recognize_google(audio)
-                        processCommand(command)
-        except sr.UnknownValueError:
-            print("Sorry, I could not understand your voice.")
+                        try:
+                            command = r.recognize_google(audio)
+                            processCommand(command)
+                        
+                        except sr.UnknownValueError:
+                            print("Sorry, I could not understand your voice.")
         except sr.RequestError:
             print("Network error.")
         except Exception as e:
