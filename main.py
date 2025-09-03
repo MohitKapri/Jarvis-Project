@@ -11,7 +11,7 @@ import wikipedia    #Search and fetch summaries from Wikipedia.
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-newsapi = "" # write your API key here
+newsapi = "" #Enter your API key here
 
 
 def speak(text):
@@ -129,6 +129,7 @@ if __name__ == "__main__":
             print("Network error.")
         except Exception as e:
             print(f"Error: {e}")
+
 
 
 
